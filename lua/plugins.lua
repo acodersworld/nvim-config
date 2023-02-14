@@ -13,6 +13,7 @@ local packer_bootstrap = ensure_packer()
 
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+  use {"shortcuts/no-neck-pain.nvim", tag = "*" }
   use {
     'nvim-telescope/telescope.nvim', branch = '0.1.x',
     requires = { {'nvim-lua/plenary.nvim'}, { "nvim-telescope/telescope-live-grep-args.nvim" } }
@@ -58,6 +59,11 @@ require('packer').startup(function(use)
     require('packer').sync()
   end
 end)
+
+require("no-neck-pain").setup {
+	enableOnVimEnter = true,
+	width = 150
+}
 
 local cmp = require'cmp'
 cmp.setup {
@@ -147,7 +153,7 @@ require'lspconfig'.rust_analyzer.setup{
 require'lspconfig'.eslint.setup{}
 require'lspconfig'.pyright.setup{}
 
-require("lspconfig").sumneko_lua.setup {
+require("lspconfig").lua_ls.setup {
 	settings = {
 		Lua = {
 			diagnostics = {
