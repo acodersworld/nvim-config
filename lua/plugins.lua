@@ -13,7 +13,6 @@ local packer_bootstrap = ensure_packer()
 
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
-  use {"shortcuts/no-neck-pain.nvim", tag = "*" }
   use {
     'nvim-telescope/telescope.nvim', branch = '0.1.x',
     requires = { {'nvim-lua/plenary.nvim'}, { "nvim-telescope/telescope-live-grep-args.nvim" } }
@@ -38,7 +37,7 @@ require('packer').startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
-  use { "max397574/better-escape.nvim" }
+--  use { "max397574/better-escape.nvim" }
   use { 'kdheepak/tabline.nvim' }
 
   use { 'hrsh7th/nvim-cmp' }
@@ -59,11 +58,6 @@ require('packer').startup(function(use)
     require('packer').sync()
   end
 end)
-
-require("no-neck-pain").setup {
-	enableOnVimEnter = true,
-	width = 150
-}
 
 local cmp = require'cmp'
 cmp.setup {
@@ -136,14 +130,14 @@ require('lualine').setup {
 	}
 }
 
-require("better_escape").setup {
-  mapping = {"jj"}, -- a table with mappings to use
-  timeout = 200, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
-  clear_empty_lines = false, -- clear line after escaping if there is only whitespace
-  keys = function()
-    return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
-  end,
-}
+--require("better_escape").setup {
+--  mapping = {"jj"}, -- a table with mappings to use
+--  timeout = 200, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
+--  clear_empty_lines = false, -- clear line after escaping if there is only whitespace
+--  keys = function()
+--    return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
+--  end,
+--}
 
 require'mason'.setup {}
 --require('rust-tools').setup{}
@@ -347,12 +341,24 @@ local opts = {
 
 require('rust-tools').setup(opts)
 
-vim.cmd [[highlight IndentBlanklineIndent1 ctermfg=239 ]]
-require('indent_blankline').setup{
-	char_highlight_list = {
-		'IndentBlanklineIndent1'
-	}
+local hooks = require "ibl.hooks"
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    vim.api.nvim_set_hl(0, "ibl", { ctermfg=239, fg = "#8f8f8f" })
+end)
+
+require("ibl").setup {
+	indent = { 
+		highlight = "ibl" 
+	},
+	whitespace = { 
+		highlight = "ibl" 
+	},
+	scope = { 
+		enabled = false
+	} 
 }
+
+
 
 require('nvim-window').setup({
   -- The characters available for hinting windows.
